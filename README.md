@@ -10,7 +10,7 @@
 ### Usage Showcase
 ```bash
 # Download llama3 with 12 threads
-odac.sh download llama3:latest -x 12
+oad.sh download llama3:latest -x 12
 
 # Generate download URLs only
-odac.sh get codellama:7b
+oad.sh get codellama:7b

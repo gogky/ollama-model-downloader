@@ -1,4 +1,4 @@
-🚀 **Ollama-Aria2c-Downloader**: Lightning-fast model downloader for Ollama with aria2c multi-threaded acceleration
+🚀 **Ollama-Downloader**: Lightning-fast model downloader for Ollama with aria2c multi-threaded acceleration
 
 ### Key Features
 - ⚡ **3-5x Faster** downloads using aria2c's segmented multi-threading

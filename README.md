@@ -69,5 +69,5 @@ Examples:
 After download, run the model directly with: ollama run <model-name>
 ```
 
-With **Ollama Model Downloader**, downloading and using models has never been faster! ⚡🚀
+With Ollama Model Downloader, downloading and using models is now significantly faster! ⚡
 

@@ -14,7 +14,14 @@ function show_help() {
     echo "  $0 get model_name:tag"
     echo "  $0 download model_name:tag"
     echo "  $0 download model_name:tag -x 10"
+    echo "After model download is complete, you can directly run: ollama run <model-name>"
 }
+
+# 检查帮助选项
+if [ "$1" == "--help" ]; then
+    show_help
+    exit 0
+fi
 
 # 检查参数数量
 if [ $# -lt 2 ]; then
@@ -127,6 +134,7 @@ case $COMMAND in
         fi
         
         echo "Download completed!"
+        echo "You can now run: ollama run $MODEL_NAME"
         ;;
         
     *)

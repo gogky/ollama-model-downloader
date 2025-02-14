@@ -19,13 +19,10 @@ chmod +x omdl.sh
 ```
 
 ### 2️⃣ Set Environment Variable `OLLAMA_MODELS`
-Define the location for storing downloaded models. 
-
-- macOS: `~/.ollama/models`
-- Linux: `/usr/share/ollama/.ollama/models`
+Define the location for storing downloaded models. Replace `<your_model_path>` with your preferred directory.
 
 ```bash
-export OLLAMA_MODELS=~/.ollama/models
+export OLLAMA_MODELS=<your_model_path>
 ```
 
 For more details, refer to the official [Ollama FAQ](https://github.com/ollama/ollama/blob/main/docs/faq.md#where-are-models-stored).
@@ -40,18 +37,13 @@ To increase the number of download threads (default: 4), use:
 ./omdl.sh download model_name:tag -x 10
 ```
 
-### 4️⃣ Get Model Information (Manifest & Blobs)
-```bash
-./omdl.sh get model_name:tag
-```
-
-### 5️⃣ Run the Downloaded Model
+### 4️⃣ Run the Downloaded Model
 Once downloaded, the model is ready for use:
 ```bash
 ollama run model_name:tag
 ```
 
-### 6️⃣ Help Information
+### 5️⃣ Help Information
 To view available commands and options:
 ```bash
 ./omdl.sh --help
@@ -61,15 +53,13 @@ To view available commands and options:
 ```
 Usage: ./omdl.sh <command> <model-name> [-x <threads>]
 Commands:
-  get      - Retrieve manifest and blob URLs
   download - Download manifest and blobs
 Options:
   -x <threads> - Set the number of `aria2c` threads (default: 4)
 Environment Variables:
   OLLAMA_MODELS - Path for storing models (must be set before use)
-                  Example: export OLLAMA_MODELS=~/.ollama/models
+                  Example: export OLLAMA_MODELS=<your_model_path>
 Examples:
-  ./omdl.sh get model_name:tag
   ./omdl.sh download model_name:tag
   ./omdl.sh download model_name:tag -x 10
 After download, run the model directly with: ollama run <model-name>

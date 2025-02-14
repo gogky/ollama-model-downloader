@@ -124,15 +124,19 @@ case $COMMAND in
         
         # 最后下载 manifest
         echo "Downloading manifest to: $MANIFEST_DIR/$TAG"
-        aria2c --header="Accept: application/vnd.docker.distribution.manifest.v2+json" \
-               -d "$MANIFEST_DIR" \
-               -o "$TAG" \
-               -x "$THREADS" \
-               "$MANIFEST_URL"
-        
-        if [ ! -f "$MANIFEST_DIR/$TAG" ]; then
-            echo "Failed to download manifest"
-            exit 1
+        if [ -f "$MANIFEST_DIR/$TAG" ]; then
+            echo "Manifest already exists: $TAG"
+        else
+            aria2c --header="Accept: application/vnd.docker.distribution.manifest.v2+json" \
+                   -d "$MANIFEST_DIR" \
+                   -o "$TAG" \
+                   -x "$THREADS" \
+                   "$MANIFEST_URL"
+
+            if [ ! -f "$MANIFEST_DIR/$TAG" ]; then
+                echo "Failed to download manifest"
+                exit 1
+            fi
         fi
         
         echo "Download completed!"

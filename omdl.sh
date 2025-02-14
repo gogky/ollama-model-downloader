@@ -93,21 +93,13 @@ case $COMMAND in
         mkdir -p "$MANIFEST_DIR"
         mkdir -p "$BLOBS_DIR"
         
-        echo "Downloading manifest to: $MANIFEST_DIR/$TAG"
-        aria2c --header="Accept: application/vnd.docker.distribution.manifest.v2+json" \
-               -d "$MANIFEST_DIR" \
-               -o "$TAG" \
-               -x "$THREADS" \
-               "$MANIFEST_URL"
-        
-        if [ ! -f "$MANIFEST_DIR/$TAG" ]; then
-            echo "Failed to download manifest"
-            exit 1
-        fi
+        # 首先获取 manifest 内容但不保存
+        echo "Fetching manifest information..."
+        MANIFEST=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.v2+json" "$MANIFEST_URL")
         
         # 提取并下载所有 blobs
         echo "Downloading blobs to: $BLOBS_DIR"
-        grep -o '"digest":"[^"]*"' "$MANIFEST_DIR/$TAG" | cut -d'"' -f4 | while read digest; do
+        echo "$MANIFEST" | grep -o '"digest":"[^"]*"' | cut -d'"' -f4 | while read digest; do
             blob_url="$BASE_URL/library/$MODEL_BASE/blobs/$digest"
             blob_filename="${digest//:/-}"  # 替换 : 为 -
             if [ -f "$BLOBS_DIR/$blob_filename" ]; then
@@ -120,6 +112,19 @@ case $COMMAND in
                        "$blob_url"
             fi
         done
+        
+        # 最后下载 manifest
+        echo "Downloading manifest to: $MANIFEST_DIR/$TAG"
+        aria2c --header="Accept: application/vnd.docker.distribution.manifest.v2+json" \
+               -d "$MANIFEST_DIR" \
+               -o "$TAG" \
+               -x "$THREADS" \
+               "$MANIFEST_URL"
+        
+        if [ ! -f "$MANIFEST_DIR/$TAG" ]; then
+            echo "Failed to download manifest"
+            exit 1
+        fi
         
         echo "Download completed!"
         ;;

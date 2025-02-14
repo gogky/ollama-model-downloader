@@ -10,6 +10,7 @@ function show_help() {
     echo "  -x <threads> - Specify the number of threads for aria2c (default is 8)"
     echo "Environment Variables:"
     echo "  OLLAMA_MODELS - Path to store the downloaded models (must be set before running the script)"
+    echo "                  Example: export OLLAMA_MODELS=~/.ollama/models"
     echo "Examples:"
     echo "  $0 get model_name:tag"
     echo "  $0 download model_name:tag"
@@ -91,6 +92,7 @@ case $COMMAND in
         if [ -z "$OLLAMA_MODELS" ]; then
             echo "Error: OLLAMA_MODELS environment variable is not set."
             echo "Please set the OLLAMA_MODELS environment variable before running the script."
+            echo "Example: export OLLAMA_MODELS=~/.ollama/models"
             exit 1
         fi
         

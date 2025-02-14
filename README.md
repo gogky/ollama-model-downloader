@@ -1,66 +1,79 @@
-ollama-model-downloader: Lightning-fast model downloader for Ollama with aria2c multi-threaded acceleration
-🚀 3-5x Faster downloads using aria2c's segmented multi-threading
+# Ollama Model Downloader
 
-# Usage Guide
+Lightning-fast model downloader for Ollama with `aria2c` multi-threaded acceleration.
 
-## 1. Grant Execution Permission
-First, you need to grant execution permission to the script `omdl.sh`.
+## 🚀 Features
+
+- **⚡ 3-5x Faster Downloads**: Utilizes `aria2c`'s segmented multi-threading for maximum speed.
+- **⏯️ Resume Anytime**: Interrupted downloads can be resumed effortlessly with `Ctrl+C` and re-running the command.
+- **📂 Seamless Ollama Integration**: Download models directly in Ollama's format with a single command, making them ready for immediate use.
+
+---
+
+## 🛠️ Usage Guide
+
+### 1️⃣ Grant Execution Permission
+Before using the script, grant execution permission:
 ```bash
 chmod +x omdl.sh
 ```
 
-## 2. Configure Environment Variable `OLLAMA_MODELS`
-Before running the script, set the `OLLAMA_MODELS` variable to store the downloaded models. The default path is usually `~/.ollama/models`.
+### 2️⃣ Set Environment Variable `OLLAMA_MODELS`
+Define the location for storing downloaded models. 
 
-Refer to the official documentation [Ollama FAQ](https://github.com/ollama/ollama/blob/main/docs/faq.md#where-are-models-stored) for more details.
+- macOS: `~/.ollama/models`
+- Linux: `/usr/share/ollama/.ollama/models`
 
 ```bash
 export OLLAMA_MODELS=~/.ollama/models
 ```
 
-## 3. Run the Script
+For more details, refer to the official [Ollama FAQ](https://github.com/ollama/ollama/blob/main/docs/faq.md#where-are-models-stored).
 
-### Get Model Information (manifest and blob URLs)
-```bash
-./omdl.sh get model_name:tag
-```
-
-### Download Model
+### 3️⃣ Download a Model (Seamless with Ollama)
+Easily fetch models in Ollama-compatible format:
 ```bash
 ./omdl.sh download model_name:tag
 ```
-If you want to specify the number of download threads (default is 8 threads), use the `-x` option:
+To increase the number of download threads (default: 4), use:
 ```bash
 ./omdl.sh download model_name:tag -x 10
 ```
 
-## 4. Run the Model
-Once the download is complete, you can run the model directly:
+### 4️⃣ Get Model Information (Manifest & Blobs)
+```bash
+./omdl.sh get model_name:tag
+```
+
+### 5️⃣ Run the Downloaded Model
+Once downloaded, the model is ready for use:
 ```bash
 ollama run model_name:tag
 ```
 
-## 5. Help Information
-To view help information, run:
+### 6️⃣ Help Information
+To view available commands and options:
 ```bash
 ./omdl.sh --help
 ```
 
-The help message is as follows:
+#### Help Output:
 ```
 Usage: ./omdl.sh <command> <model-name> [-x <threads>]
 Commands:
-  get      - Get manifest and blob URLs
+  get      - Retrieve manifest and blob URLs
   download - Download manifest and blobs
 Options:
-  -x <threads> - Specify the number of threads for aria2c (default is 8)
+  -x <threads> - Set the number of `aria2c` threads (default: 4)
 Environment Variables:
-  OLLAMA_MODELS - Path to store the downloaded models (must be set before running the script)
+  OLLAMA_MODELS - Path for storing models (must be set before use)
                   Example: export OLLAMA_MODELS=~/.ollama/models
 Examples:
   ./omdl.sh get model_name:tag
   ./omdl.sh download model_name:tag
   ./omdl.sh download model_name:tag -x 10
-After model download is complete, you can directly run: ollama run <model-name>
+After download, run the model directly with: ollama run <model-name>
 ```
+
+With **Ollama Model Downloader**, downloading and using models has never been faster! ⚡🚀
 

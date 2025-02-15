@@ -24,10 +24,7 @@ Define the location for storing downloaded models. Replace `<your_model_path>` w
 ```bash
 export OLLAMA_MODELS=<your_model_path>
 ```
-Generally, the default locations are:
-
-- macOS: `~/.ollama/models`
-- Linux: `/usr/share/ollama/.ollama/models`
+Generally, the default locations are: `~/.ollama/models`
 
 For more details, refer to the official [Ollama FAQ](https://github.com/ollama/ollama/blob/main/docs/faq.md#where-are-models-stored).
 

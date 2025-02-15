@@ -1,5 +1,30 @@
 #!/bin/bash
 
+# 检查必要的依赖
+check_dependencies() {
+    local missing_deps=()
+    
+    # 检查 aria2c
+    if ! command -v aria2c &> /dev/null; then
+        missing_deps+=("aria2c")
+    fi
+    
+    # 检查 curl
+    if ! command -v curl &> /dev/null; then
+        missing_deps+=("curl")
+    fi
+    
+    if [ ${#missing_deps[@]} -ne 0 ]; then
+        echo "Error: The following required dependencies are not installed:"
+        printf '%s\n' "${missing_deps[@]}"
+        echo "Please install these dependencies first."
+        exit 1
+    fi
+}
+
+# 在脚本开始时立即检查依赖
+check_dependencies
+
 # 定义帮助信息
 function show_help() {
     echo "Usage: $0 <command> <model-name> [-x <threads>]"
@@ -80,13 +105,23 @@ cleanup() {
 # 注册信号处理
 trap cleanup SIGINT SIGTERM
 
+# 获取 manifest
+MANIFEST=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.v2+json" "$MANIFEST_URL")
+
+# 提取 Blob URLs
+BLOB_URLS=$(echo "$MANIFEST" | grep -o '"digest":"[^"]*"' | cut -d'"' -f4)
+
+
+# 检查 manifest 是否合法
+if [ -z "$BLOB_URLS" ]; then
+    echo "Error: file does not exist: Model path may be incorrect or unofficial"
+    exit 1
+fi
+
+
 case $COMMAND in
     "get")
         echo "Manifest URL: $MANIFEST_URL"
-        
-        # 获取 manifest 内容并解析
-        MANIFEST=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.v2+json" $MANIFEST_URL)
-        
         echo -e "\nBlob URLs:"
         echo "$MANIFEST" | grep -o '"digest":"[^"]*"' | cut -d'"' -f4 | while read digest; do
             echo "$BASE_URL/library/$MODEL_BASE/blobs/$digest"
@@ -114,15 +149,11 @@ case $COMMAND in
         mkdir -p "$MANIFEST_DIR"
         mkdir -p "$BLOBS_DIR"
         
-        # 获取 manifest 内容
-        echo "Fetching manifest information..."
-        MANIFEST=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.v2+json" "$MANIFEST_URL")
-        
         # 提取并下载所有 blobs
         echo "Downloading blobs to: $BLOBS_DIR"
         DIGESTS=($(echo "$MANIFEST" | grep -o '"digest":"[^"]*"' | cut -d'"' -f4))
         
-        # 依次下载所有blobs，实际上只有第一个gguf文件体积大
+        # 实际上只有gguf文件体积大
         for digest in "${DIGESTS[@]}"; do
             blob_url="$BASE_URL/library/$MODEL_BASE/blobs/$digest"
             blob_filename="${digest//:/-}"
@@ -145,7 +176,7 @@ case $COMMAND in
              "$MANIFEST_URL" > "$MANIFEST_DIR/$TAG"
         
         echo "Download completed!"
-        echo "You can now run: ollama run $MODEL_NAME"
+        echo "You can now run: **ollama run $MODEL_NAME**" | sed 's/\*\*/\x1b[1m/g' | sed 's/\*\*/\x1b[0m/g'
         ;;
         
     *)

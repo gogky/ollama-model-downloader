@@ -4,7 +4,7 @@ Lightning-fast model downloader for Ollama with `aria2c` multi-threaded accelera
 
 ## 🚀 Features
 
-- **⚡ 3-5x Faster Downloads**: Utilizes `aria2c`'s segmented multi-threading for maximum speed.
+- **⚡ Faster Downloads**: Utilizes `aria2c`'s segmented multi-threading for maximum speed.
 - **⏯️ Resume Anytime**: Interrupted downloads can be resumed effortlessly with `Ctrl+C` and re-running the command.
 - **📂 Seamless Ollama Integration**: Download models directly in Ollama's format with a single command, making them ready for immediate use.
 

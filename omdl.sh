@@ -91,7 +91,11 @@ else
 fi
 
 # 构造 manifest URL
-MANIFEST_URL="$BASE_URL/library/$MODEL_BASE/manifests/$TAG"
+if [[ $MODEL_BASE == *"/"* ]]; then
+    MANIFEST_URL="$BASE_URL/$MODEL_BASE/manifests/$TAG"
+else
+    MANIFEST_URL="$BASE_URL/library/$MODEL_BASE/manifests/$TAG"
+fi
 
 # 添加在脚本开头部分，show_help 函数之前
 # 定义清理函数
@@ -114,7 +118,7 @@ BLOB_URLS=$(echo "$MANIFEST" | grep -o '"digest":"[^"]*"' | cut -d'"' -f4)
 
 # 检查 manifest 是否合法
 if [ -z "$BLOB_URLS" ]; then
-    echo "Error: file does not exist: Model path may be incorrect or unofficial"
+    echo "Error: file does not exist: Model path may be incorrect"
     exit 1
 fi
 

@@ -128,7 +128,11 @@ case $COMMAND in
         echo "Manifest URL: $MANIFEST_URL"
         echo -e "\nBlob URLs:"
         echo "$MANIFEST" | grep -o '"digest":"[^"]*"' | cut -d'"' -f4 | while read digest; do
-            echo "$BASE_URL/library/$MODEL_BASE/blobs/$digest"
+            if [[ $MODEL_BASE == *"/"* ]]; then
+                echo "$BASE_URL/$MODEL_BASE/blobs/$digest"
+            else
+                echo "$BASE_URL/library/$MODEL_BASE/blobs/$digest"
+            fi
         done
         ;;
         

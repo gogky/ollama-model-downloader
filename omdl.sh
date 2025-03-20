@@ -148,7 +148,11 @@ case $COMMAND in
         fi
         
         # 创建必要的目录
-        MANIFEST_DIR="$OLLAMA_MODELS/manifests/$REGISTRY/library/$MODEL_BASE"
+        if [[ $MODEL_BASE == *"/"* ]]; then
+            MANIFEST_DIR="$OLLAMA_MODELS/manifests/$REGISTRY/$MODEL_BASE"
+        else
+            MANIFEST_DIR="$OLLAMA_MODELS/manifests/$REGISTRY/library/$MODEL_BASE"
+        fi
         BLOBS_DIR="$OLLAMA_MODELS/blobs"
         mkdir -p "$MANIFEST_DIR"
         mkdir -p "$BLOBS_DIR"
@@ -159,7 +163,11 @@ case $COMMAND in
         
         # 实际上只有gguf文件体积大
         for digest in "${DIGESTS[@]}"; do
-            blob_url="$BASE_URL/library/$MODEL_BASE/blobs/$digest"
+            if [[ $MODEL_BASE == *"/"* ]]; then
+                blob_url="$BASE_URL/$MODEL_BASE/blobs/$digest"
+            else
+                blob_url="$BASE_URL/library/$MODEL_BASE/blobs/$digest"
+            fi
             blob_filename="${digest//:/-}"
             echo "Downloading: $blob_filename"
             aria2c -d "$BLOBS_DIR" \
